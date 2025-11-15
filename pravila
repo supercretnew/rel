@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила сервера - RelaxGrief</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a1128;
+            --primary-dark: #050a1a;
+            --accent: #1e40af;
+            --accent-light: #3b82f6;
+            --text: #e2e8f0;
+            --text-light: #94a3b8;
+            --dark: #0f172a;
+            --card-bg: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(5, 10, 26, 0.95);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--accent-light), #60a5fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--accent-light);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-light);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(30, 64, 175, 0.2) 0%, rgba(5, 10, 26, 0) 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.05"><polygon fill="white" points="0,1000 1000,0 1000,1000"/></svg>');
+            z-index: -1;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #e2e8f0, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--text-light);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+            animation: fadeInUp 1s ease 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.6);
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Rules Section */
+        .rules {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent-light);
+            border-radius: 3px;
+        }
+        
+        .rules-category {
+            margin-bottom: 50px;
+            background-color: rgba(30, 41, 59, 0.7);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .rules-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .category-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--accent-light);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .category-title i {
+            font-size: 1.5rem;
+        }
+        
+        .rules-list {
+            list-style: none;
+        }
+        
+        .rule-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .rule-item:hover {
+            background-color: rgba(15, 23, 42, 0.7);
+            border-left-color: var(--accent-light);
+        }
+        
+        .rule-number {
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-right: 10px;
+        }
+        
+        .rule-text {
+            color: var(--text);
+        }
+        
+        .sub-rule {
+            margin-left: 20px;
+            margin-top: 10px;
+            padding-left: 15px;
+            border-left: 2px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .warning-note {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-dark);
+            padding: 40px 0 20px;
+            margin-top: 50px;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-light), transparent);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--accent-light);
+        }
+        
+        .footer-section p, .footer-section a {
+            color: var(--text-light);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--accent-light);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 99;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero {
+                padding: 100px 0 60px;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--primary-dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="icon.png" alt="RelaxGrief Logo">
+                    <h1>RelaxGrief</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Главная</a></li>
+                        <li><a href="#rules">Правила</a></li>
+                        <li><a href="https://t.me/small_king46">Купить привилегию</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Правила сервера RelaxGrief</h2>
+            <p>Ознакомьтесь с правилами нашего сервера. Соблюдение этих правил обязательно для всех игроков.</p>
+            <a href="#rules" class="cta-button">Читать правила</a>
+        </div>
+    </section>
+
+    <!-- Rules Section -->
+    <section class="rules" id="rules">
+        <div class="container">
+            <h2 class="section-title">Свод правил</h2>
+            
+            <!-- Основные правила -->
+            <div class="rules-category">
+                <h3 class="category-title"><i class="fas fa-gavel"></i> 1. Основные правила</h3>
+                <ul class="rules-list">
+                    <li class="rule-item">
+                        <span class="rule-number">1.1</span>
+                        <span class="rule-text">Незнание правил не освобождает вас от ответственности;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.2</span>
+                        <span class="rule-text">Начав играть на наших серверах, Вы автоматически подтверждаете своё согласие с данным сводом правил;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.3</span>
+                        <span class="rule-text">Администратор вправе наказать игрока по причине, не указанной в настоящих правилах;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.4</span>
+                        <span class="rule-text">Администрация не несет ответственности за временную или постоянную невозможность игры на сервере конкретным лицом или группой лиц;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.5</span>
+                        <span class="rule-text">Администрация не несет ответственности за потерю игровых ценностей в следствии нарушения работоспособности сервера или его плагинов;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.6</span>
+                        <span class="rule-text">Администрация не гарантирует работоспособность сервера, а также сохранность информации на нем и продолжение работы над ним;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.7</span>
+                        <span class="rule-text">Администрация сервера не гарантирует надёжную работу в предоставлении услуг и сервисов, а также не несёт ответственность за ущерб, который может быть причинён пользователям вследствие сбоев в линиях связи, ошибочного использования предоставляемых услуг, дефектов программного обеспечения или других действий, которые могут привести к возникновению нежелательных ситуаций;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.8</span>
+                        <span class="rule-text">Игроки обязаны соблюдать все правила;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.9</span>
+                        <span class="rule-text">Администрация ведет логи всех действий игроков на сервере и всех сообщений чата;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.10</span>
+                        <span class="rule-text">Администрация имеет право корректировать данный свод правил без уведомления игрока;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">1.11</span>
+                        <span class="rule-text">Оскорбление, провоцирование администрации запрещено.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Правила чата -->
+            <div class="rules-category">
+                <h3 class="category-title"><i class="fas fa-comments"></i> 2. Правила чата</h3>
+                <ul class="rules-list">
+                    <li class="rule-item">
+                        <span class="rule-number">2.1</span>
+                        <span class="rule-text">Запрещен Капс/Спам/Флуд в любом из чатов;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.2</span>
+                        <span class="rule-text">Запрещены унижения, оскорбления игроков;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.3</span>
+                        <span class="rule-text">Запрещена нецензурная лексика (маты, скрытые маты);</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.4</span>
+                        <span class="rule-text">Запрещено рекламировать/упоминать посторонние ресурсы, которые не связаны с проектом или его ресурсами;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.5</span>
+                        <span class="rule-text">Чатами для рекламы/покупки/продажи разрешено пользоваться только в их тематичных целях;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.6</span>
+                        <span class="rule-text">Запрещено упоминать/оскорблять родных и близких игроков;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.7</span>
+                        <span class="rule-text">Запрещается розжиг межнациональной розни, подстрекательство на конфликт этой темы, расизм;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.8</span>
+                        <span class="rule-text">Запрещено как-либо обходить блокировку чата;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.9</span>
+                        <span class="rule-text">Запрещено вызывать игроков на проверку читов;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.10</span>
+                        <span class="rule-text">Запрещено отправлять свои контактные данные(дискорд, вк и т.д) в чатах (исключение: личные сообщения);</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.11</span>
+                        <span class="rule-text">Запрещено продавать ресурсы или услуги ВНЕ серверного чата, например через дискорд;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">2.12</span>
+                        <span class="rule-text">Самопризнание в нарушении правил проекта является поводом для бана.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Аккаунт -->
+            <div class="rules-category">
+                <h3 class="category-title"><i class="fas fa-user"></i> 3. Аккаунт</h3>
+                <ul class="rules-list">
+                    <li class="rule-item">
+                        <span class="rule-number">3.1</span>
+                        <span class="rule-text">Ник не должен содержать:</span>
+                        <ul class="sub-rule">
+                            <li class="rule-item">
+                                <span class="rule-number">3.1.1</span>
+                                <span class="rule-text">Мата, скрытого мата, унижений, оскорблений;</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-number">3.1.2</span>
+                                <span class="rule-text">Схожесть с названием других проектов/чит клиентов;</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-number">3.1.3</span>
+                                <span class="rule-text">Схожесть с Администраторами, Ютуберами проекта;</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-number">3.1.4</span>
+                                <span class="rule-text">Схожесть с никами пользователей из ЧС Проекта;</span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">3.2</span>
+                        <span class="rule-text">Запрещается предоставлять свой аккаунт другим людям;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">3.3</span>
+                        <span class="rule-text">Ответственность несет владелец аккаунта, независимо от того, кто совершал действия под данным аккаунтом;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">3.4</span>
+                        <span class="rule-text">Запрещена продажа/передача аккаунтов, продажа привилегий;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">3.5</span>
+                        <span class="rule-text">Донат невозможно перенести на другой аккаунт.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Игровые правила -->
+            <div class="rules-category">
+                <h3 class="category-title"><i class="fas fa-gamepad"></i> 4. Игровые правила</h3>
+                <ul class="rules-list">
+                    <li class="rule-item">
+                        <span class="rule-number">4.1</span>
+                        <span class="rule-text">Запрещено мошенничество, обман администрации;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.2</span>
+                        <span class="rule-text">Запрещено продавать/покупать у игроков игровые ценности за реальную валюту;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.3</span>
+                        <span class="rule-text">Запрещено пользоваться всем, что упрощает процесс игры, а именно:</span>
+                        <ul class="sub-rule">
+                            <li class="rule-item">
+                                <span class="rule-number">4.3.1</span>
+                                <span class="rule-text">Сторонними программами, читами, кликерами, автоматизациями (Кроме разрешенных пунктом 4.13);</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-number">4.3.2</span>
+                                <span class="rule-text">Модами, запрещенными пунктом 4.12;</span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.4</span>
+                        <span class="rule-text">Запрещено как-либо помогать, укрывать нарушителя или способствовать в его неправомерных действиях;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.5</span>
+                        <span class="rule-text">Запрещено играть на проекте, если Ваши аккаунты были неоднократно блокированы пунктом 4.3 и его подпунктам;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.6</span>
+                        <span class="rule-text">Запрещено вызывание неполадок в работе сервера или попытки обрушить сервер, путем специально вызванных лагов или подобного;</span>
+                        <ul class="sub-rule">
+                            <li class="rule-item">
+                                <span class="rule-number">4.6.1</span>
+                                <span class="rule-text">Запрещена постройка и запуск механизмов, приводящих к одновременной активации большого количества поршней. Для ферм на поршнях рекомендуется использовать наблюдатели, которые активируют малое количество поршней</span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.7</span>
+                        <span class="rule-text">Запрещено выдавать себя за Администрацию, устанавливать ники похожие на Администрацию или их префиксы;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.8</span>
+                        <span class="rule-text">Запрещено использование/скрытие багов/недоработок сервера;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.9</span>
+                        <span class="rule-text">Запрещено играть/взаимодействовать и помогать на режиме с игроками в количестве больше, чем разрешено на режиме.</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.10</span>
+                        <span class="rule-text">Запрещено строительство половых органов, нацистских символик, лавакастов;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">4.11</span>
+                        <span class="rule-text">Запрещено подстрекать третьих лиц на нарушение правил;</span>
+                    </li>
+                </ul>
+                <div class="warning-note">
+                    <strong>Примечание:</strong> За многочисленное и постоянное нарушение пунктов 4.3 и 4.4 настоящих правил мы вправе полностью обнулить все Ваши аккаунты.
+                </div>
+            </div>
+            
+            <!-- Правила проверки ПО -->
+            <div class="rules-category">
+                <h3 class="category-title"><i class="fas fa-shield-alt"></i> 5. Правила проверки ПО</h3>
+                <ul class="rules-list">
+                    <li class="rule-item">
+                        <span class="rule-number">5.1</span>
+                        <span class="rule-text">Вы обязаны выполнять требования Проверяющего
+                        <br><small>(Важно! Вы должны понимать, что проверка проводится исключительно в целях поиска читов, запрещённых модификаций, программ и другого запрещённого ПО, поэтому если Проверяющий просит Вас выполнить нелогичные для проверки действия, например: включить веб-камеру, "покукарекать", дать ему ресурсы — отключайтесь от проверки и срочно сообщите об этом Администрации)</small></span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">5.2</span>
+                        <span class="rule-text">Данный свод правил не окончателен и может изменяться в зависимости от требований Проверяющего;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">5.3</span>
+                        <span class="rule-text">Следите за чатом во время проверки, если Вы не увидели/проигнорировали сообщение от Проверяющего, это не будет расцениваться поводом для разблокировки аккаунта;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">5.4</span>
+                        <span class="rule-text">В случае если у Вас возникли непредвиденные обстоятельства, необходимо обязательно сообщить об этом Проверяющему;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">5.5</span>
+                        <span class="rule-text">Запрещается препятствовать проведению проверки: долго открывать папки, задавать неуместные вопросы, оскорблять/унижать Проверяющего, игнорировать его требования и так далее;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">5.6</span>
+                        <span class="rule-text">Во время проверки запрещается удалять какие-либо файлы с Вашего ПК, в том числе очищать корзину;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">5.7</span>
+                        <span class="rule-text">Во время проверки запрещается выходить из Minecraft, также не забывайте, "крашнул майн", "был в афк" — не расцениваются как повод для разблокировки аккаунта;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">5.8</span>
+                        <span class="rule-text">Запрещается снимать ход проверки, исключение: личное разрешение Проверяющего;</span>
+                    </li>
+                    <li class="rule-item">
+                        <span class="rule-number">5.9</span>
+                        <span class="rule-text">Проверяющий имеет право попросить Вас установить программы для эффективного и быстрого проведения проверки.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>RelaxGrief</h3>
+                    <p>Хороший гриферский сервер в майнкрафт!</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <p>Покупка привелегий:</p>
+                    <a href="https://t.me/FragerInt">Telegram: @FragerInt</a>
+                    <p>По всем вопросам обращайтесь:</p>
+                    <a href="https://t.me/supercretnew">Telegram: @supercretnew</a>
+                    <a href="https://t.me/@ragerInt">Telegram: @FragerInt</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Социальные сети</h3>
+                    <p>Следите за нашими обновлениями</p>
+                    <div class="social-links">
+                        <a href="https://t.me/relaxgrief"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Поддержка</h3>
+                    <p>ТБАНК: 2200701991464519</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; сайт бу @supercretnew
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Плавная прокрутка к якорям
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Анимация появления карточек при прокрутке
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Применяем анимацию к категориям правил
+        document.querySelectorAll('.rules-category').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Изменение хедера при прокрутке
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Показать/скрыть кнопку "Наверх"
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        // Анимация появления элементов при загрузке
+        window.addEventListener('DOMContentLoaded', function() {
+            const heroElements = document.querySelectorAll('.hero h2, .hero p, .hero .cta-button');
+            heroElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+        
+        // Кнопка "Наверх"
+        document.querySelector('.back-to-top').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
