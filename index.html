@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RelaxGrief - Магазин привилегий</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a1128;
+            --primary-dark: #050a1a;
+            --accent: #1e40af;
+            --accent-light: #3b82f6;
+            --text: #e2e8f0;
+            --text-light: #94a3b8;
+            --dark: #0f172a;
+            --card-bg: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(5, 10, 26, 0.95);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--accent-light), #60a5fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--accent-light);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-light);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(30, 64, 175, 0.2) 0%, rgba(5, 10, 26, 0) 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.05"><polygon fill="white" points="0,1000 1000,0 1000,1000"/></svg>');
+            z-index: -1;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #e2e8f0, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--text-light);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+            animation: fadeInUp 1s ease 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.6);
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background-color: rgba(15, 23, 42, 0.5);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background-color: rgba(30, 41, 59, 0.7);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent-light);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        .feature-card p {
+            color: var(--text-light);
+        }
+        
+        /* Privileges Section */
+        .privileges {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent-light);
+            border-radius: 3px;
+        }
+        
+        .privileges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .privilege-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            position: relative;
+        }
+        
+        .privilege-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .privilege-image {
+            height: 200px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .privilege-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+        }
+        
+        .privilege-content {
+            padding: 25px;
+        }
+        
+        .privilege-name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+        
+        .privilege-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--accent-light);
+        }
+        
+        .privilege-old-price {
+            text-decoration: line-through;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+        
+        .privilege-description {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .privilege-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .privilege-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .privilege-button:hover {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #60a5fa 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(30, 64, 175, 0.4);
+        }
+        
+        .privilege-button:hover::before {
+            left: 100%;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* How to Buy Section */
+        .how-to-buy {
+            padding: 80px 0;
+            background-color: rgba(15, 23, 42, 0.5);
+        }
+        
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 50px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 30px 20px;
+            background-color: rgba(30, 41, 59, 0.7);
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        .step p {
+            color: var(--text-light);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-dark);
+            padding: 40px 0 20px;
+            margin-top: 50px;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-light), transparent);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--accent-light);
+        }
+        
+        .footer-section p, .footer-section a {
+            color: var(--text-light);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--accent-light);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 99;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero {
+                padding: 100px 0 60px;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .privileges-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps-container {
+                flex-direction: column;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--primary-dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="icon.png" alt="WellGrief Logo">
+                    <h1>RelaxGrief</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="rules/index.html">Правила</a></li>
+                        <li><a href="#features">Преимущества</a></li>
+                        <li><a href="#privileges">Привилегии</a></li>
+                        <li><a href="#how-to-buy">Как купить</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>RelaxGrief - Магазин привилегий</h2>
+            <p>Приобретите уникальные привилегии для максимального удовольствия от игры на нашем сервере Minecraft. Ограниченные предложения и скидки!</p>
+            <a href="#privileges" class="cta-button">Выбрать привилегию</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Надежность</h3>
+                    <p>Все привилегии активируются после оплаты и проверки. Гарантия качества и поддержка.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>имба сервер</h3>
+                    <p>сервер iба чотко , играйте</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>поддержка</h3>
+                    <p>Наша команда готова помочь с любыми вопросами и проблемами.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Эксклюзивность</h3>
+                    <p>Уникальные привилегии с особыми возможностями для каждого игрока.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privileges Section -->
+    <section class="privileges" id="privileges">
+        <div class="container">
+            <h2 class="section-title">Наши привилегии</h2>
+            <div class="privileges-grid">
+                <!-- custom -->
+                <div class="privilege-card">
+                    <div class="popular-badge">Рекомендуем</div>
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #f59e0b, #d97706);">
+                        🎮
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">custom</h3>
+                        <div class="privilege-price">2240 руб</div>
+                        <p class="privilege-description">Максимальная привилегия с доступом ко всем возможностям сервера</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+                
+                <!-- d.admin -->
+                <div class="privilege-card">
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #dc2626, #b91c1c);">
+                        🔥
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">d.admin</h3>
+                        <div class="privilege-price">830 руб</div>
+                        <p class="privilege-description">Продвинутая привилегия с расширенными возможностями</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+                
+                <!-- axolot -->
+                <div class="privilege-card">
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #ec4899, #db2777);">
+                        ⚡
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">axolot</h3>
+                        <div class="privilege-price">640 руб</div>
+                        <p class="privilege-description">Мощная привилегия для опытных игроков</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+                
+                <!-- morph -->
+                <div class="privilege-card">
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        🐉
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">morph</h3>
+                        <div class="privilege-price">460 руб</div>
+                        <p class="privilege-description">Эпическая привилегия с уникальными способностями</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+                
+                <!-- osiris -->
+                <div class="privilege-card">
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #10b981, #059669);">
+                        👴
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">osiris</h3>
+                        <div class="privilege-price">320 руб</div>
+                        <p class="privilege-description">Привилегия для уважаемых игроков сервера</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+                
+                <!-- nebula -->
+                <div class="privilege-card">
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #6366f1, #4f46e5);">
+                        💎
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">nebula</h3>
+                        <div class="privilege-price">150 руб</div>
+                        <p class="privilege-description">Стильная привилегия с полезными функциями</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+                
+                <!-- phonix -->
+                <div class="privilege-card">
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #f97316, #ea580c);">
+                        😠
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">phonix</h3>
+                        <div class="privilege-price">65 руб</div>
+                        <p class="privilege-description">Энергичная привилегия для активных игроков</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+                
+                <!-- triton -->
+                <div class="privilege-card">
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #06b6d4, #0891b2);">
+                        ⛏️
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">triton</h3>
+                        <div class="privilege-price">35 руб</div>
+                        <p class="privilege-description">Идеальный выбор для любителей майнинга</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+                
+                <!-- hydra -->
+                <div class="privilege-card">
+                    <div class="privilege-image" style="background:linear-gradient(135deg, #84cc16, #65a30d);">
+                        🔥
+                    </div>
+                    <div class="privilege-content">
+                        <h3 class="privilege-name">hydra</h3>
+                        <div class="privilege-price">10 руб</div>
+                        <p class="privilege-description">Горячая привилегия по отличной цене</p>
+                        <a href="https://t.me/FragerInt" class="privilege-button">Купить сейчас</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Buy Section -->
+    <section class="how-to-buy" id="how-to-buy">
+        <div class="container">
+            <h2 class="section-title">Как приобрести привилегию</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Выберите привилегию</h3>
+                    <p>Ознакомьтесь с нашими предложениями и выберите подходящую привилегию</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Свяжитесь с нами</h3>
+                    <p>Напишите нам в Telegram для оформления заказа и получения инструкций по оплате</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Оплатите заказ</h3>
+                    <p>Выполните оплату удобным для вас способом по полученным инструкциям</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Получите привилегию</h3>
+                    <p>После проверки платежа привилегия будет активирована на вашем аккаунте</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacts">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>RelaxGrief</h3>
+                    <p>Лучший гриферский сервер в Minecraft с уникальными возможностями и активным сообществом!</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <p>Покупка привилегий:</p>
+                    <a href="https://t.me/FragerInt">Telegram: @FragerInt</a>
+                    <p>По всем вопросам обращайтесь:</p>
+                    <a href="https://t.me/supercretnew">Telegram: @supercretnew</a>
+                    <a href="https://t.me/FragerInt">Telegram: @FragerInt</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Социальные сети</h3>
+                    <p>Следите за нашими обновлениями</p>
+                    <div class="social-links">
+                        <a href="https://t.me/relaxgrief"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Поддержка</h3>
+                    <p>ТБАНК: 2200701991464519</p>
+                    <p>Мы всегда готовы помочь с любыми вопросами!</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 RelaxGrief. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Плавная прокрутка к якорям
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Анимация появления карточек при прокрутке
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Применяем анимацию к карточкам привилегий и фичам
+        document.querySelectorAll('.privilege-card, .feature-card, .step').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Изменение хедера при прокрутке
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Показать/скрыть кнопку "Наверх"
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        // Анимация появления элементов при загрузке
+        window.addEventListener('DOMContentLoaded', function() {
+            const heroElements = document.querySelectorAll('.hero h2, .hero p, .hero .cta-button');
+            heroElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+        
+        // Кнопка "Наверх"
+        document.querySelector('.back-to-top').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
